@@ -1,33 +1,90 @@
 package tw.org.iii.prjposapp;
 
+import android.annotation.SuppressLint;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
-public class Actmain extends AppCompatActivity {
+public class Actmain extends AppCompatActivity implements View.OnClickListener{
+
+
+
+    private View.OnClickListener btn_confirm = new View.OnClickListener(){
+
+        String strMsg = "";
+
+        @Override
+        public void onClick(View v) {
+
+             if(btn1.isEnabled() == false){
+                 strMsg += "★紅茶\n"+"     ";
+             }else if (btn2.isEnabled() == false){
+                 strMsg += "★抹茶\n"+"     ";
+             }else if (btn3.isEnabled() == false){
+                 strMsg +="★奶茶\n"+"     ";
+             }
+
+                String[] arySugar = getResources().getStringArray(R.array.sugar);
+                String[] aryIce = getResources().getStringArray(R.array.ice);
+
+                Integer sugarindex = np1.getValue();
+                Integer iceindex =np2.getValue();
+
+
+                strMsg += "="+arySugar[sugarindex]+" ";
+                strMsg += "=" + aryIce[iceindex] +" ";
+                strMsg += np3.getValue() + "杯\n";
+                lblList.setText(strMsg);
+
+
+
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.actmain);
+        InitialComponent();
+    }
 
 
-        NumberPicker numberPicker = (NumberPicker) findViewById(R.id.picker);
+
+    private void InitialComponent() {
+        btn1 = findViewById(R.id.btn1);
+        btn1.setOnClickListener(this);
+
+        btn2 = findViewById(R.id.btn2);
+        btn2.setOnClickListener(this);
+
+        btn3 = findViewById(R.id.btn3);
+        btn3.setOnClickListener(this);
+
+        np1 = findViewById(R.id.picker);
+        np2 = findViewById(R.id.picker2);
+        np3 = findViewById(R.id.picker3);
+
         final String[] sugar = getResources().getStringArray(R.array.sugar);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(sugar.length - 1);
-        numberPicker.setDisplayedValues(sugar);
-        numberPicker.setValue(1); // 設定預設位置
-        numberPicker.setWrapSelectorWheel(false); // 是否循環顯示
-        numberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // 不可編輯
-        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        np1.setMinValue(0);
+        np1.setMaxValue(sugar.length - 1);
+        np1.setDisplayedValues(sugar);
+        np1.setValue(1); // 設定預設位置
+        np1.setWrapSelectorWheel(false); // 是否循環顯示
+        np1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); // 不可編輯
+        np1.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 
             }
         });
 
-        NumberPicker np2 =(NumberPicker) findViewById(R.id.picker2);
+
         final String[] ice = getResources().getStringArray(R.array.ice);
         np2.setMinValue(0);
         np2.setMaxValue(ice.length -1);
@@ -43,7 +100,7 @@ public class Actmain extends AppCompatActivity {
 
         });
 
-        NumberPicker np3 =(NumberPicker) findViewById(R.id.picker3);
+
         np3.setMinValue(1);
         np3.setMaxValue(99);
         np3.setValue(1);
@@ -56,12 +113,48 @@ public class Actmain extends AppCompatActivity {
         });
 
 
-
-
-
-
+        btn確認 = findViewById(R.id.btn確認);
+        btn確認.setOnClickListener(btn_confirm);
+        lblList = findViewById(R.id.lblList);
 
 
 
     }
+
+    Button btn1,btn2,btn3,btn確認;
+    NumberPicker np1,np2,np3;
+    TextView lblList;
+
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.btn1:
+                btn1.setEnabled(false);
+                btn2.setEnabled(true);
+                btn3.setEnabled(true);
+
+                break;
+            case R.id.btn2:
+                btn2.setEnabled(false);
+                btn1.setEnabled(true);
+                btn3.setEnabled(true);
+
+                break;
+            case R.id.btn3:
+                btn3.setEnabled(false);
+                btn2.setEnabled(true);
+                btn1.setEnabled(true);
+
+                break;
+            default:
+                break;
+        }
+
+    }
+
+
+
 }
