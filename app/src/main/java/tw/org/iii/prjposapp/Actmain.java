@@ -11,40 +11,52 @@ import android.widget.TextView;
 
 public class Actmain extends AppCompatActivity implements View.OnClickListener{
 
+    String strMsg = "";
+    Integer total_price =0;
+
 
 
     private View.OnClickListener btn_confirm = new View.OnClickListener(){
-
-        String strMsg = "";
-
         @Override
         public void onClick(View v) {
 
+            Integer intPrice = 0;
+
              if(btn1.isEnabled() == false){
-                 strMsg += "★紅茶\n"+"     ";
+                 strMsg += "★紅茶";
+                 intPrice =25;
              }else if (btn2.isEnabled() == false){
-                 strMsg += "★抹茶\n"+"     ";
+                 strMsg += "★抹茶";
+                 intPrice =35;
              }else if (btn3.isEnabled() == false){
-                 strMsg +="★奶茶\n"+"     ";
+                 strMsg +="★奶茶";
+                 intPrice =45;
              }
 
                 String[] arySugar = getResources().getStringArray(R.array.sugar);
                 String[] aryIce = getResources().getStringArray(R.array.ice);
 
-                Integer sugarindex = np1.getValue();
-                Integer iceindex =np2.getValue();
+                Integer sugar_index = np1.getValue();
+                Integer ice_index =np2.getValue();
 
 
-                strMsg += "="+arySugar[sugarindex]+" ";
-                strMsg += "=" + aryIce[iceindex] +" ";
-                strMsg += np3.getValue() + "杯\n";
+                strMsg += "**"+arySugar[sugar_index]+" ";
+                strMsg += "**" + aryIce[ice_index] +" ";
+                strMsg += "**" + np3.getValue() + "杯\n";
+                strMsg += "小計 : " + intPrice*(np3.getValue()) +"元\n";
                 lblList.setText(strMsg);
 
+                total_price += intPrice*(np3.getValue());
 
 
         }
     };
+    private View.OnClickListener btn_cash = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
 
+        }
+    };
 
 
     @Override
@@ -115,15 +127,21 @@ public class Actmain extends AppCompatActivity implements View.OnClickListener{
 
         btn確認 = findViewById(R.id.btn確認);
         btn確認.setOnClickListener(btn_confirm);
+
         lblList = findViewById(R.id.lblList);
 
+        btn結帳 = findViewById(R.id.btn結帳);
+        btn結帳.setOnClickListener(btn_cash);
 
 
     }
 
-    Button btn1,btn2,btn3,btn確認;
+    Button btn1,btn2,btn3,btn確認,btn結帳;
     NumberPicker np1,np2,np3;
     TextView lblList;
+
+
+
 
 
     @SuppressLint("ResourceAsColor")
