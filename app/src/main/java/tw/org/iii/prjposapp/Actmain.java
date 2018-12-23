@@ -1,7 +1,10 @@
 package tw.org.iii.prjposapp;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,8 +14,37 @@ import android.widget.TextView;
 
 public class Actmain extends AppCompatActivity implements View.OnClickListener{
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.actmain);
+        InitialComponent();
+    }
+
+
     String strMsg = "";
     Integer total_price =0;
+    String  strTotal_price="";
+
+    private  View.OnClickListener btn_clear =new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            btn1.setEnabled(true);
+            btn2.setEnabled(true);
+            btn3.setEnabled(true);
+
+            np1.setValue(1);
+            np2.setValue(1);
+            np3.setValue(1);
+
+            lblList.setText("");
+
+            strMsg = "";
+            total_price =0;
+            strTotal_price="";
+
+        }
+    };
 
 
 
@@ -22,14 +54,32 @@ public class Actmain extends AppCompatActivity implements View.OnClickListener{
 
             Integer intPrice = 0;
 
+            if ((btn1.isEnabled() == true) && (btn2.isEnabled() == true) &&(btn3.isEnabled()==true))
+            {
+                    new AlertDialog.Builder(Actmain.this)
+                            .setTitle("警告提示")
+                            .setIcon(R.drawable.warning)
+                            .setMessage("請點選至少一項商品。")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }
+                            )
+                            .show();
+
+
+            }else
+                {
              if(btn1.isEnabled() == false){
-                 strMsg += "★紅茶";
+                 strMsg += "★紅茶\n";
                  intPrice =25;
              }else if (btn2.isEnabled() == false){
-                 strMsg += "★抹茶";
+                 strMsg += "★抹茶\n";
                  intPrice =35;
              }else if (btn3.isEnabled() == false){
-                 strMsg +="★奶茶";
+                 strMsg +="★奶茶\n";
                  intPrice =45;
              }
 
@@ -46,25 +96,41 @@ public class Actmain extends AppCompatActivity implements View.OnClickListener{
                 strMsg += "小計 : " + intPrice*(np3.getValue()) +"元\n";
                 lblList.setText(strMsg);
 
+
                 total_price += intPrice*(np3.getValue());
 
+                strTotal_price = "總計消費金額 : " + total_price.toString();
+            }
 
         }
     };
+
+
+
     private View.OnClickListener btn_cash = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if(v.getId() == R.id.btn結帳){
+                new AlertDialog.Builder(Actmain.this)
+                        .setTitle("總計金額")
+                        .setIcon(R.drawable.coins)
+                        .setMessage(strTotal_price)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                       dialog.dismiss();
+                                    }
+                                }
+                        )
+                        .show();
+            }
+
 
         }
     };
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.actmain);
-        InitialComponent();
-    }
+
 
 
 
@@ -133,10 +199,12 @@ public class Actmain extends AppCompatActivity implements View.OnClickListener{
         btn結帳 = findViewById(R.id.btn結帳);
         btn結帳.setOnClickListener(btn_cash);
 
+        btn作廢 = findViewById(R.id.btn作廢);
+        btn作廢.setOnClickListener(btn_clear);
 
     }
 
-    Button btn1,btn2,btn3,btn確認,btn結帳;
+    Button btn1,btn2,btn3,btn確認,btn結帳,btn作廢;
     NumberPicker np1,np2,np3;
     TextView lblList;
 
